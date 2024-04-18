@@ -1,21 +1,27 @@
-﻿using T_Plus.RepairCostProgram.Models;
+﻿using Serilog;
+using T_Plus.RepairCostProgram.Models;
+using T_Plus.ThermalProgram.DatabaseContext;
+using T_Plus.ThermalProgram.Models;
+using T_Plus.ThermalProgram.Repository;
 
 namespace T_Plus.RepairCostProgram
 {
     public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            while(true)
-            {
+            var context = new ApplicationContext();
+            
+            
+                var t = new ThermalNodeProgram();
                 if (args.Length != 2)
                 {
                     Console.WriteLine("Usage: RepairCostProgram.exe <thermalNodeId> <logFilePath>");
                     return;
                 }
 
-                int thermalNodeId;
-                if (!int.TryParse(args[0], out thermalNodeId))
+                Guid thermalNodeId = t.ThermalNodeId;
+                if (!Guid.TryParse(args[0], out thermalNodeId))
                 {
                     Console.WriteLine("Invalid thermalNodeId. Please provide a valid integer.");
                     return;
@@ -26,12 +32,14 @@ namespace T_Plus.RepairCostProgram
                 try
                 {
                     double initialCost = ThermalNodeRepairData.GenerateRandomCost();
-                    double newCost = initialCost + 500.0; // Пример: добавляем 500.0 к исходному значению
+                    double newCost = initialCost + 500.0;
 
-                    await ThermalNodeRepairData.LogToFileAsync(logFilePath, $"[{DateTime.Now}] - Initial cost for Thermal Node {thermalNodeId}: {initialCost}");
-                    await ThermalNodeRepairData.LogToFileAsync(logFilePath, $"[{DateTime.Now}] - New cost for Thermal Node {thermalNodeId}: {newCost}");
+                    
+                    var thermalNode = new ThermalNodeRepairData(context);
+                    await thermalNode.LogToFileAsync(logFilePath);
+                    await thermalNode.LogToFileAsync(logFilePath);
 
-                    await ThermalNodeRepairData.UpdateCostInDatabaseAsync(thermalNodeId, newCost);
+                    await thermalNode.UpdateCostAsync(thermalNodeId, newCost);
 
                     Console.WriteLine("Repair cost updated successfully.");
                 }
@@ -39,7 +47,7 @@ namespace T_Plus.RepairCostProgram
                 {
                     Console.WriteLine($"An error occurred: {ex.Message}");
                 }
-            }
+            
            
         }
     }

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T_Plus.ThermalProgram", "T_Plus.ThermalProgram\T_Plus.ThermalProgram.csproj", "{61AAF848-1065-4D05-8E35-0CF549FE5C81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T_Plus.RepairCostProgram", "T_Plus.RepairCostProgram\T_Plus.RepairCostProgram.csproj", "{6547C7EF-F31D-428B-A79D-B67B2B5CDD52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61AAF848-1065-4D05-8E35-0CF549FE5C81} = {61AAF848-1065-4D05-8E35-0CF549FE5C81}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

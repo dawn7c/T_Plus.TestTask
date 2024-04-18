@@ -19,4 +19,8 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\T_Plus.ThermalProgram\T_Plus.ThermalProgram.csproj" />
+  </ItemGroup>
+
 </Project>

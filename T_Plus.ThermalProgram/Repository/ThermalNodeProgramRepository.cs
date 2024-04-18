@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Linq.Expressions;
-using T_Plus.ThermalProgram.CustomLogger;
 using T_Plus.ThermalProgram.DatabaseContext;
 
 
@@ -35,21 +32,12 @@ namespace T_Plus.ThermalProgram.Repository
         {
             try
             {
-                //string basePath = AppDomain.CurrentDomain.BaseDirectory;
-                //string subprogramRelativePath = "T_Plus.RepairCostProgram.exe";
-                //string subprogramPath = Path.GetFullPath(Path.Combine(basePath, subprogramRelativePath));
-
-
-                //string workingDirectory = Path.GetDirectoryName(subprogramPath);
-
-
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = "D:\\andrey loh (projects)\\T_Plus.TestTask\\T_Plus.RepairCostProgram\\bin\\Debug\\net8.0\\T_Plus.RepairCostProgram.exe",
                     CreateNoWindow = true,
                     UseShellExecute = true
                 };
-
 
                 Process.Start(startInfo);
 
@@ -64,10 +52,8 @@ namespace T_Plus.ThermalProgram.Repository
         
         private void LogSubprogramStart(string nodeName)
         {
-
             string logMessage = $"[{DateTime.Now}] - Запуск программы для теплового узла {nodeName}";
             _logger.Information(logMessage);
-
         }
 
         public string[] GetThermalNodes()
