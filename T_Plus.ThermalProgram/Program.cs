@@ -1,10 +1,22 @@
-﻿namespace T_Plus.ThermalProgram
+﻿using Serilog;
+using T_Plus.ThermalProgram.DatabaseContext;
+
+namespace T_Plus.ThermalProgram
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.File("path_to_log_file.txt")
+            .CreateLogger();
+
+            var context = new ApplicationContext();
+
+            
+            var manager = new Repository.ThermalNodeProgramRepository(context, Log.Logger);
+
+            await manager.RunAllSubprogramsAsync();
         }
     }
 }

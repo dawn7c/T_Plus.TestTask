@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T_Plus.ThermalProgram", "T_Plus.ThermalProgram\T_Plus.ThermalProgram.csproj", "{61AAF848-1065-4D05-8E35-0CF549FE5C81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T_Plus.RepairCostProgram", "T_Plus.RepairCostProgram\T_Plus.RepairCostProgram.csproj", "{6547C7EF-F31D-428B-A79D-B67B2B5CDD52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{61AAF848-1065-4D05-8E35-0CF549FE5C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61AAF848-1065-4D05-8E35-0CF549FE5C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61AAF848-1065-4D05-8E35-0CF549FE5C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6547C7EF-F31D-428B-A79D-B67B2B5CDD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6547C7EF-F31D-428B-A79D-B67B2B5CDD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6547C7EF-F31D-428B-A79D-B67B2B5CDD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6547C7EF-F31D-428B-A79D-B67B2B5CDD52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
