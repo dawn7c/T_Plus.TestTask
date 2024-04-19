@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Diagnostics;
 using T_Plus.ThermalProgram.DatabaseContext;
+using T_Plus.ThermalProgram.Models;
 
 
 namespace T_Plus.ThermalProgram.Repository
@@ -14,31 +16,35 @@ namespace T_Plus.ThermalProgram.Repository
         {
             _context = context;
             _logger = logger;
+            
         }
 
         public async Task RunAllSubprogramsAsync()
         {
             var thermalNodes = await _context.ThermalNodes.ToListAsync();
-
-            foreach (var node in thermalNodes)
+            var nodeNames = await GetNamesThermalNodesAsync();
+            foreach (var nodeName in nodeNames)
             {
-                RunSubprogram(node.ThermalNodeName);
-                LogSubprogramStart(node.ThermalNodeName);
-                await Task.Delay(TimeSpan.FromMinutes(1)); 
+                var guid = await GetThermalNodeIdByNameAsync(nodeName);
+                RunSubprogram(nodeName, guid);
+                LogSubprogramStart(nodeName);
+                //await Task.Delay(TimeSpan.FromMinutes(1));
             }
         }
 
-        private void RunSubprogram(string nodeName)
+        private void RunSubprogram(string nodeName, Guid guid) 
         {
+            string logFilePath = Path.GetFullPath(@"T_Plus.TestTask\T_Plus.ThermalProgram\bin\Debug\net8.0\log_12320240419.exe");
             try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo
+                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = "D:\\andrey loh (projects)\\T_Plus.TestTask\\T_Plus.RepairCostProgram\\bin\\Debug\\net8.0\\T_Plus.RepairCostProgram.exe",
-                    CreateNoWindow = true,
-                    UseShellExecute = true
-                };
-
+                    Arguments = guid.ToString(),
+                    CreateNoWindow = false,
+                    UseShellExecute = false
+                } ;
+                 
                 Process.Start(startInfo);
 
                 string logMessage = $"Запуск программы для теплового узла {nodeName}";
@@ -56,10 +62,26 @@ namespace T_Plus.ThermalProgram.Repository
             _logger.Information(logMessage);
         }
 
-        public string[] GetThermalNodes()
+        public async Task<List<string>> GetNamesThermalNodesAsync()
         {
-            var nodeNames = _context.ThermalNodes.Select(node => node.ThermalNodeName).ToArray();
+            List<string> nodeNames = await _context.ThermalNodes.Select(node => node.ThermalNodeName).ToListAsync();
+            foreach (var node in nodeNames)
+            {
+                Log.Logger = new LoggerConfiguration()
+               .WriteTo.File($"log_123.txt", rollingInterval: RollingInterval.Day)
+               .CreateLogger();
+                Log.Information($"[{DateTime.Now}] - Запуск приложения. Имя теплового узла:{node}");
+                Log.CloseAndFlush();
+            }
             return nodeNames;
+        }
+
+        private async Task<Guid> GetThermalNodeIdByNameAsync(string nodeName)
+        {
+            return await _context.ThermalNodes
+                                   .Where(node => node.ThermalNodeName == nodeName)
+                                   .Select(node => node.ThermalNodeId)
+                                   .FirstOrDefaultAsync();
         }
     }
 }

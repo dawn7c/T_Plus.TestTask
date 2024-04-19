@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using T_Plus.ThermalProgram.CustomLogger;
 using T_Plus.ThermalProgram.DatabaseContext;
 
 namespace T_Plus.ThermalProgram
@@ -9,9 +8,11 @@ namespace T_Plus.ThermalProgram
          
         static async Task Main(string[] args)
         {
-            FileLogger.LogToFile();
             var context = new ApplicationContext();
+
+            Console.WriteLine("Ожидается запуск подпрограмм");
             var manager = new Repository.ThermalNodeProgramRepository(context, Log.Logger);
+            manager.GetNamesThermalNodesAsync().Wait();
             await manager.RunAllSubprogramsAsync();
         }
     }

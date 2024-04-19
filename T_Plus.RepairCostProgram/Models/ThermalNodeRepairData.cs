@@ -1,20 +1,23 @@
 ﻿using T_Plus.ThermalProgram.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using T_Plus.RepairCostProgram.Logger;
+using T_Plus.ThermalProgram.Models;
+using static NpgsqlTypes.NpgsqlTsQuery;
 
 namespace T_Plus.RepairCostProgram.Models
 {
     public class ThermalNodeRepairData
     {
         private readonly ApplicationContext _context;
-        private readonly RepairCostDataLogger _logger;
+        private readonly ILogger _logger;
+        private readonly DbSet<ThermalNodeProgram> _dbSet;
 
 
-        public ThermalNodeRepairData(ApplicationContext context, RepairCostDataLogger logger)
+        public ThermalNodeRepairData(ApplicationContext context, Serilog.ILogger logger)
         {
             _context = context;
             _logger = logger;
+            _dbSet = _context.Set<ThermalNodeProgram>();
         }
 
         public static double GenerateRandomCost()
@@ -28,24 +31,31 @@ namespace T_Plus.RepairCostProgram.Models
             Console.WriteLine(message);
         }
 
-        public async Task UpdateCostAsync(Guid thermalNodeId, double newCost)
+        public async Task UpdatePropertiesAsync(Guid thermalNodeId, double newCost)
         {
             var node = await _context.ThermalNodes.FirstOrDefaultAsync(n => n.ThermalNodeId == thermalNodeId);
 
             if (node != null)
             {
+                Log.Logger = new LoggerConfiguration()
+                .WriteTo.File($"log_2.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+                Console.WriteLine($"Updated repair cost for Thermal Node {thermalNodeId} to {newCost} in the database.");
+                Log.Information($"[{DateTime.Now}] - Приложение запущено. Исходное значение: {node.RepairCost}, Новое значение: {newCost}");
+                Log.CloseAndFlush();
                 node.RepairCost = newCost;
-                node.DateModified = DateTime.Now;
-
+                node.DateModified = DateTime.Now.ToUniversalTime();
+                _dbSet.Update(node);
                 await _context.SaveChangesAsync();
 
-                Console.WriteLine($"Updated repair cost for Thermal Node {thermalNodeId} to {newCost} in the database.");
             }
             else
             {
                 Console.WriteLine($"Thermal Node {thermalNodeId} not found in the database.");
             }
         }
+
+        
 
     }
 }

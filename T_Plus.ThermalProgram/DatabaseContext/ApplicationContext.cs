@@ -24,7 +24,7 @@ namespace T_Plus.ThermalProgram.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ThermalNodeProgram>().HasNoKey();
+            modelBuilder.Entity<ThermalNodeProgram>().HasKey(t=> t.ThermalNodeId);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace T_Plus.RepairCostProgram.Validation
     {
         public ValidationResult CheckArgs(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length <= 2)
             {
                 return new ValidationResult(false, "Usage ThermalId, log");
             }
