@@ -1,11 +1,7 @@
 ﻿using Serilog;
-using Serilog.Core;
 using T_Plus.RepairCostProgram.Models;
 using T_Plus.RepairCostProgram.Validation;
 using T_Plus.ThermalProgram.DatabaseContext;
-using T_Plus.ThermalProgram.Models;
-using T_Plus.ThermalProgram.Repository;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace T_Plus.RepairCostProgram
 {
@@ -41,8 +37,6 @@ namespace T_Plus.RepairCostProgram
                     var thermalNode = new ThermalNodeRepairData(context, (ILogger)logger);
                     await thermalNode.LogToFileAsync(logFilePath);
                     await thermalNode.UpdatePropertiesAsync(thermalNodeId, newCost);
-
-
                     Console.WriteLine("Repair cost updated successfully.");
                 }
                 catch (Exception ex)

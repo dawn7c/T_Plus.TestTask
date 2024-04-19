@@ -2,8 +2,6 @@
 using Serilog;
 using System.Diagnostics;
 using T_Plus.ThermalProgram.DatabaseContext;
-using T_Plus.ThermalProgram.Models;
-
 
 namespace T_Plus.ThermalProgram.Repository
 {
@@ -28,7 +26,7 @@ namespace T_Plus.ThermalProgram.Repository
                 var guid = await GetThermalNodeIdByNameAsync(nodeName);
                 RunSubprogram(nodeName, guid);
                 LogSubprogramStart(nodeName);
-                //await Task.Delay(TimeSpan.FromMinutes(1));
+                await Task.Delay(TimeSpan.FromMinutes(2));
             }
         }
 

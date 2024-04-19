@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using T_Plus.ThermalProgram.Models;
-using static NpgsqlTypes.NpgsqlTsQuery;
 
 namespace T_Plus.RepairCostProgram.Models
 {
@@ -54,8 +53,5 @@ namespace T_Plus.RepairCostProgram.Models
                 Console.WriteLine($"Thermal Node {thermalNodeId} not found in the database.");
             }
         }
-
-        
-
     }
 }

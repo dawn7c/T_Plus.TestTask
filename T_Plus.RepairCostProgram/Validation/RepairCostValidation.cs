@@ -1,6 +1,4 @@
-﻿
-
-namespace T_Plus.RepairCostProgram.Validation
+﻿namespace T_Plus.RepairCostProgram.Validation
 {
     public class RepairCostValidation
     {
