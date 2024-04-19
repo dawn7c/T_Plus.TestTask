@@ -1,40 +1,32 @@
 ﻿using T_Plus.ThermalProgram.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using T_Plus.RepairCostProgram.Logger;
 
 namespace T_Plus.RepairCostProgram.Models
 {
     public class ThermalNodeRepairData
     {
         private readonly ApplicationContext _context;
-        //private readonly Serilog.ILogger _logger;
-        private static ILogger logger = new LoggerConfiguration()
-        .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day) // Указываете имя файла и интервал ротации (если нужно)
-        .CreateLogger();
+        private readonly RepairCostDataLogger _logger;
 
-        public ThermalNodeRepairData(ApplicationContext context)
+
+        public ThermalNodeRepairData(ApplicationContext context, RepairCostDataLogger logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public static double GenerateRandomCost()
         {
             Random random = new Random();
-            return random.NextDouble() * (20000.0 - 5000.0) + 5000.0; // неправильно, должнол
+            return random.NextDouble() * (20000.0 - 5000.0) + 5000.0;
         }
 
         public async Task LogToFileAsync(string message)
         {
-            logger.Information(message);
+            Console.WriteLine(message);
         }
-
-        //public static async Task UpdateCostInDatabaseAsync(int thermalNodeId, double newCost)
-        //{
-        //    // Здесь может быть ваш код для записи нового значения затрат в БД
-        //    // В данном примере просто выводится сообщение
-        //    await Task.Delay(100); // Имитация задержки записи в БД
-        //    Console.WriteLine($"Updated repair cost for Thermal Node {thermalNodeId} to {newCost} in the database.");
-        //}
 
         public async Task UpdateCostAsync(Guid thermalNodeId, double newCost)
         {

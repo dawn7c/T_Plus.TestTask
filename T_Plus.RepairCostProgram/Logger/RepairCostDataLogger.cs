@@ -1,11 +1,11 @@
 ﻿using Serilog;
 
-namespace T_Plus.ThermalProgram.CustomLogger
+namespace T_Plus.RepairCostProgram.Logger
 {
-    public class FileLogger
+    public class RepairCostDataLogger
     {
         private static int logId = 1;
-        public static void LogToFile()
+        public void RepairCostDataLogToFile()
         {
             int currentLogId = logId++;
 
@@ -15,5 +15,7 @@ namespace T_Plus.ThermalProgram.CustomLogger
             Log.Information($"[{DateTime.Now}] - Запуск приложения. Номер лога: {currentLogId}");
             Log.CloseAndFlush();
         }
+
+        
     }
 }

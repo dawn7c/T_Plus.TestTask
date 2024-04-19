@@ -1,8 +1,12 @@
 ﻿using Serilog;
+using Serilog.Core;
+using T_Plus.RepairCostProgram.Logger;
 using T_Plus.RepairCostProgram.Models;
+using T_Plus.RepairCostProgram.Validation;
 using T_Plus.ThermalProgram.DatabaseContext;
 using T_Plus.ThermalProgram.Models;
 using T_Plus.ThermalProgram.Repository;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace T_Plus.RepairCostProgram
 {
@@ -11,23 +15,24 @@ namespace T_Plus.RepairCostProgram
         static async Task Main(string[] args)
         {
             var context = new ApplicationContext();
-            
-            
-                var t = new ThermalNodeProgram();
-                if (args.Length != 2)
-                {
-                    Console.WriteLine("Usage: RepairCostProgram.exe <thermalNodeId> <logFilePath>");
-                    return;
-                }
-
-                Guid thermalNodeId = t.ThermalNodeId;
-                if (!Guid.TryParse(args[0], out thermalNodeId))
-                {
-                    Console.WriteLine("Invalid thermalNodeId. Please provide a valid integer.");
-                    return;
-                }
-
-                string logFilePath = args[1];
+            var logger = new RepairCostDataLogger();
+            logger.RepairCostDataLogToFile();
+            var termalNodeProgram = new ThermalNodeProgram();
+            var repairVal = new RepairCostValidation();
+            var validation = repairVal.CheckArgs(args);
+            if(!validation.IsValid) 
+            {
+                Console.WriteLine(validation.Message);
+                return;
+            }
+            validation = repairVal.ValidateParse(args);
+            if (!validation.IsValid)
+            {
+                Console.WriteLine(validation.Message);
+                return;
+            }
+            Guid thermalNodeId = termalNodeProgram.ThermalNodeId;
+            string logFilePath = args[1];
 
                 try
                 {
@@ -35,7 +40,7 @@ namespace T_Plus.RepairCostProgram
                     double newCost = initialCost + 500.0;
 
                     
-                    var thermalNode = new ThermalNodeRepairData(context);
+                    var thermalNode = new ThermalNodeRepairData(context, logger);
                     await thermalNode.LogToFileAsync(logFilePath);
                     await thermalNode.LogToFileAsync(logFilePath);
 
