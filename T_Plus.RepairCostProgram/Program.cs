@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using Serilog.Core;
 using T_Plus.RepairCostProgram.Models;
 using T_Plus.RepairCostProgram.Validation;
 using T_Plus.ThermalProgram.DatabaseContext;
@@ -10,52 +9,8 @@ namespace T_Plus.RepairCostProgram
     {
         static async Task Main(string[] args)
         {
-            
-                Console.WriteLine($"{args[0]} 4234234234");
                 var context = new ApplicationContext();
-                
-                var repairVal = new RepairCostValidation();
-                var validation = repairVal.CheckArgs(args);
-                //if (!validation.IsValid)
-                //{
-                //    Console.WriteLine(validation.Message);
-                //    return;
-                //}
-                //validation = repairVal.ValidateParse(args);
-                //if (!validation.IsValid)
-                //{
-                //    Console.WriteLine(validation.Message);
-                //    return;
-                //}
-                Guid thermalNodeId = new Guid(args[0]);
-                string logFilePath = args[1];
-
-                try
-                {
-                    double initialCost = ThermalNodeRepairData.GenerateRandomCost();
-                    double newCost = initialCost + 500.0;
-
-                    var thermalNode = new ThermalNodeRepairData(context, Log.Logger);
-                    await thermalNode.LogToFileAsync(logFilePath);
-                    await thermalNode.UpdatePropertiesAsync(thermalNodeId, newCost);
-                    Console.WriteLine("Repair cost updated successfully.");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An error occurred: {ex.Message}");
-                }
-                Console.ReadLine();
-
-
-        }
-
-        public static async Task test(string[] args)
-        {
-            while (true)
-            {
-
-                var context = new ApplicationContext();
-                var logger = new LoggerConfiguration();
+                var repairData = new ThermalNodeRepairData(context, Log.Logger);
                 var repairVal = new RepairCostValidation();
                 var validation = repairVal.CheckArgs(args);
                 if (!validation.IsValid)
@@ -69,15 +24,17 @@ namespace T_Plus.RepairCostProgram
                     Console.WriteLine(validation.Message);
                     return;
                 }
+
                 Guid thermalNodeId = new Guid(args[0]);
                 string logFilePath = args[1];
 
                 try
                 {
-                    double initialCost = ThermalNodeRepairData.GenerateRandomCost();
-                    double newCost = initialCost + 500.0;
+                    double initialCost = (double)await repairData.GetInitialCostAsync(thermalNodeId);
+                    double newCost = ThermalNodeRepairData.GenerateRandomCost() + initialCost;
 
-                    var thermalNode = new ThermalNodeRepairData(context, (ILogger)logger);
+
+                    var thermalNode = new ThermalNodeRepairData(context, Log.Logger);
                     await thermalNode.LogToFileAsync(logFilePath);
                     await thermalNode.UpdatePropertiesAsync(thermalNodeId, newCost);
                     Console.WriteLine("Repair cost updated successfully.");
@@ -86,9 +43,8 @@ namespace T_Plus.RepairCostProgram
                 {
                     Console.WriteLine($"An error occurred: {ex.Message}");
                 }
-            }
+                Console.ReadLine();
+
         }
-
-
     }
 }

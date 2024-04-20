@@ -53,5 +53,18 @@ namespace T_Plus.RepairCostProgram.Models
                 Console.WriteLine($"Thermal Node {thermalNodeId} not found in the database.");
             }
         }
+
+        public async Task<double?> GetInitialCostAsync(Guid thermalNodeId)
+        {
+            var thermalNode = await _context.ThermalNodes.FirstOrDefaultAsync(t => t.ThermalNodeId == thermalNodeId);
+            if (thermalNode != null)
+            {
+                return thermalNode.RepairCost;
+            }
+            else
+            {
+                return null; 
+            }
+        }
     }
 }

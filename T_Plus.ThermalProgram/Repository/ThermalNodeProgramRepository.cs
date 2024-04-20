@@ -14,7 +14,6 @@ namespace T_Plus.ThermalProgram.Repository
         {
             _context = context;
             _logger = logger;
-            
         }
 
         public async Task RunAllSubprogramsAsync()
@@ -36,28 +35,22 @@ namespace T_Plus.ThermalProgram.Repository
             try
             {
                  ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = "D:\\andrey loh (projects)\\T_Plus.TestTask\\T_Plus.RepairCostProgram\\bin\\Debug\\net8.0\\T_Plus.RepairCostProgram.exe",
-                    Arguments = $"{guid.ToString()}  {logFilePath}", 
+                 {
+                    FileName = ".\\bin\\Debug\\net8.0\\T_Plus.RepairCostProgram.exe",
+                    Arguments = $"{guid}  {logFilePath}", 
                     CreateNoWindow = false,
                     UseShellExecute = false
-                } ;
+                 };
 
                 Process process = Process.Start(startInfo);
                 if (process != null)
                 {
-                    // Процесс успешно запущен, теперь сохраняем его идентификатор
                     int processId = process.Id;
-
-
                     string logMessage = $"Запуск программы для теплового узла {nodeName}";
                     _logger.Information(logMessage);
 
-                    // Ждем завершения процесса
-                    //process.WaitForExit();
-                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    await Task.Delay(TimeSpan.FromSeconds(120));
 
-                    // Теперь можно закрыть процесс
                     process.Kill();
                 }
             }
