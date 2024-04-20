@@ -24,13 +24,13 @@ namespace T_Plus.ThermalProgram.Repository
             foreach (var nodeName in nodeNames)
             {
                 var guid = await GetThermalNodeIdByNameAsync(nodeName);
-                RunSubprogram(nodeName, guid);
+                await RunSubprogram(nodeName, guid);
                 LogSubprogramStart(nodeName);
-                await Task.Delay(TimeSpan.FromMinutes(2));
+                await Task.Delay(TimeSpan.FromSeconds(10));
             }
         }
 
-        private void RunSubprogram(string nodeName, Guid guid) 
+        private async Task RunSubprogram(string nodeName, Guid guid) 
         {
             string logFilePath = Path.GetFullPath(@"T_Plus.TestTask\T_Plus.ThermalProgram\bin\Debug\net8.0\log_12320240419.exe");
             try
@@ -38,15 +38,28 @@ namespace T_Plus.ThermalProgram.Repository
                  ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = "D:\\andrey loh (projects)\\T_Plus.TestTask\\T_Plus.RepairCostProgram\\bin\\Debug\\net8.0\\T_Plus.RepairCostProgram.exe",
-                    Arguments = guid.ToString(),
+                    Arguments = $"{guid.ToString()}  {logFilePath}", 
                     CreateNoWindow = false,
                     UseShellExecute = false
                 } ;
-                 
-                Process.Start(startInfo);
 
-                string logMessage = $"Запуск программы для теплового узла {nodeName}";
-                _logger.Information(logMessage);
+                Process process = Process.Start(startInfo);
+                if (process != null)
+                {
+                    // Процесс успешно запущен, теперь сохраняем его идентификатор
+                    int processId = process.Id;
+
+
+                    string logMessage = $"Запуск программы для теплового узла {nodeName}";
+                    _logger.Information(logMessage);
+
+                    // Ждем завершения процесса
+                    //process.WaitForExit();
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+
+                    // Теперь можно закрыть процесс
+                    process.Kill();
+                }
             }
             catch (Exception ex)
             {

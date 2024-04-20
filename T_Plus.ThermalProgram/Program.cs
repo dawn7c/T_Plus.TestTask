@@ -14,6 +14,7 @@ namespace T_Plus.ThermalProgram
             var manager = new Repository.ThermalNodeProgramRepository(context, Log.Logger);
             manager.GetNamesThermalNodesAsync().Wait();
             await manager.RunAllSubprogramsAsync();
+            
         }
     }
 }
