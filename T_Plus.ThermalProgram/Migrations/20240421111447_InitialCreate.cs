@@ -22,6 +22,7 @@ namespace T_Plus.ThermalProgram.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_ThermalNodes", x => x.ThermalNodeId);
                 });
         }
 

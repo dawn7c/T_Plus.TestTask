@@ -12,8 +12,8 @@ using T_Plus.ThermalProgram.DatabaseContext;
 namespace T_Plus.ThermalProgram.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240418121151_second")]
-    partial class second
+    [Migration("20240421111447_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,18 +27,21 @@ namespace T_Plus.ThermalProgram.Migrations
 
             modelBuilder.Entity("T_Plus.ThermalProgram.Models.ThermalNodeProgram", b =>
                 {
+                    b.Property<Guid>("ThermalNodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("RepairCost")
                         .HasColumnType("double precision");
 
-                    b.Property<Guid>("ThermalNodeId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("ThermalNodeName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.HasKey("ThermalNodeId");
 
                     b.ToTable("ThermalNodes");
                 });
