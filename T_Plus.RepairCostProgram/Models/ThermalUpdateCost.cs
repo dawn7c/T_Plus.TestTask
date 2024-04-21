@@ -13,8 +13,6 @@ namespace T_Plus.RepairCostProgram.Models
                 var repairData = new ThermalNodeRepairData(context, filepath);
                 double initialCost = await repairData.GetInitialCostAsync(thermalNodeId);
                 double newCost = repairData.GenerateRandomCost() + initialCost;
-
-                //await repairData.LogToConsoleAsync(logFilePath);
                 await repairData.UpdatePropertiesAsync(thermalNodeId, newCost);
                 Console.WriteLine("Repair cost updated successfully.");
             }

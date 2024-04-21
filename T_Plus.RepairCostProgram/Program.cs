@@ -1,7 +1,5 @@
-﻿using Serilog;
-using T_Plus.RepairCostProgram.Models;
+﻿using T_Plus.RepairCostProgram.Models;
 using T_Plus.RepairCostProgram.Validation;
-using T_Plus.ThermalProgram.DatabaseContext;
 
 namespace T_Plus.RepairCostProgram
 {
@@ -11,10 +9,6 @@ namespace T_Plus.RepairCostProgram
         {
             var repairVal = new RepairCostValidation();
             var thermalUpdate = new ThermalUpdateCost();
-            foreach (var item in args)
-            {
-                await Console.Out.WriteLineAsync(item);
-            }
             var validation = repairVal.CheckArgs(args);
             if (!validation.IsValid)
             {

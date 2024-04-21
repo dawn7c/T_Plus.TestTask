@@ -1,6 +1,5 @@
 ﻿using T_Plus.ThermalProgram.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 using T_Plus.ThermalProgram.Models;
 using T_Plus.ThermalProgram.CustomLoggerService;
 

@@ -16,18 +16,12 @@ namespace T_Plus.ThermalProgram.CustomLoggerService
             {
                 loggerConfiguration.WriteTo.File(logFilePath);
             }
-
             _logger = loggerConfiguration.CreateLogger();
         }
 
         public void Information(string message)
         {
             _logger.Information(message);
-        }
-
-        public void Debug(string message)
-        {
-            _logger.Debug(message);
         }
 
         public void Warning(string message)
@@ -38,11 +32,6 @@ namespace T_Plus.ThermalProgram.CustomLoggerService
         public void Error(string message)
         {
             _logger.Error(message);
-        }
-
-        public void Fatal(string message)
-        {
-            _logger.Fatal(message);
         }
     }
 }
